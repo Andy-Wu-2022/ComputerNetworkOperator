@@ -1,0 +1,6 @@
+version 2
+no auto-summary
+network
+no network
+no version 2
+auto-summary

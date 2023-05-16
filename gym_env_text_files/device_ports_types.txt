@@ -1,0 +1,4 @@
+GigabitEthernet
+FastEthernet
+Ethernet
+Serial

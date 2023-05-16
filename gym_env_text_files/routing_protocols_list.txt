@@ -1,0 +1,3 @@
+router rip
+router eigrp 1
+router ospf 1

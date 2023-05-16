@@ -1,0 +1,4 @@
+no shutdown
+ip address
+shutdown
+no ip address
