@@ -64,7 +64,8 @@ that is all,
 please help on fixing the issues. Thanks.
 
 Correct_Commands: 
-Here are the recommended commands to fix the network issues: On device: Device-G, Port-3, use command: no shutdown.
+Here are the recommended commands to fix the network issues:
+On device: Device-G, Port-3, use command: no shutdown.
 On device: Device-G, Port-3, use command: ip address IP-Address-60 255.255.255.0.
 On device: Device-G, router eigrp 1, use command: no network IP-Subnet-6 0.0.0.255.
 On device: Device-G, router eigrp 1, use command: network IP-Subnet-13 0.0.0.255.

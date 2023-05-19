@@ -64,7 +64,7 @@ if __name__ == '__main__':
             obs, reward, done, info = topology_envs.step(action)
             info = info[0]
             if print_details and j == 0:
-                print('', '#'*50, '\n        Network Information for Human only\n', '#'*50, '\nTopology_Description: \n{}\n\nNetwork_Status: \n{}\n\nCorrect_Commands: \n{}\n'.format(info['topology_description'].replace(': 1. ', ':\n1. ').replace('. 2. ', '.\n2. ').replace('. 3. ', '.\n3. '), info['network_status'].replace(', ', ',\n').replace('network: ', 'network:\n'), info['correct_commands'].replace('. ', '.\n')), '#'*50, '\n\n---> The operator starts here:\n')
+                print('', '#'*50, '\n        Network Information for Human only\n', '#'*50, '\nTopology_Description: \n{}\n\nNetwork_Status: \n{}\n\nCorrect_Commands: \n{}\n'.format(info['topology_description'].replace(': 1. ', ':\n1. ').replace('. 2. ', '.\n2. ').replace('. 3. ', '.\n3. '), info['network_status'].replace(', ', ',\n').replace('network: ', 'network:\n'), info['correct_commands'].replace('. ', '.\n').replace(': On', ':\nOn')), '#'*50, '\n\n---> The operator starts here:\n')
             j += 1
             if print_details:
                 print('Step {}: {}'.format(str(j), info['actor_info']))
