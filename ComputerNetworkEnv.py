@@ -171,6 +171,7 @@ class ComputerNetworkEnv(RandomTopo):
         self.gym_position = self.gym_moves % self.len_gym_positions_list
         self.gym_position_info = self.gym_positions_list[self.gym_position]
         sub_pos = self.gym_position_info[10]
+        self.sub_pos_info = ''
         if sub_pos == 0:
             self.subnets_position_info = {}
         self.re_calculate = True
@@ -399,9 +400,21 @@ class ComputerNetworkEnv(RandomTopo):
         return i
 
     def step(self, action):
+        self.reward_multiplier = 1  # disabled it by forcing it to 1, remove this line to re-enable it
+        #
+        y = self.gym_position_info[1]
+        sub_pos = self.gym_position_info[10]
+        if y != self.num_devices:  # not routing features
+            if sub_pos == 0:
+                self.sub_pos_info = 'Link-Status'
+            elif sub_pos == 1:
+                self.sub_pos_info = 'IP-Info'
+        else:  # routing features
+            self.sub_pos_info = 'Routing-Feature-'+str(sub_pos+1)
+        #
         action0 = action
         action = self.action_to_command_index(int(round(action, 0)))
-        actor_info = 'Checking device: {}, {}.'.format(self.gym_position_info[4], self.gym_position_info[5])
+        actor_info = 'Checking device: {}, {}, {}.'.format(self.gym_position_info[4], self.gym_position_info[5], self.sub_pos_info)
         done = False
         append_action = False
         self.true_steps += 1
@@ -419,6 +432,7 @@ class ComputerNetworkEnv(RandomTopo):
                 action = [1, self.action_info_12, action]
             #
             if action[0] == 0:  # move
+                actor_info = 'Checking on device: {}, {}, {}. -> Here is Good.'.format(self.gym_position_info[4], self.gym_position_info[5], self.sub_pos_info)
                 self.actions_list_lock = False
                 self.action_mode = 'all'
                 if not self.data_augmentation or self.data_augmentation_value >= self.len_ip_addresses_simple:
@@ -444,15 +458,17 @@ class ComputerNetworkEnv(RandomTopo):
                 self.re_calculate = True
                 #
                 self.steps_on_single_fault = 0
-                actor_info = 'Checking on device: {}, {}.'.format(self.gym_position_info[4], self.gym_position_info[5])
             else:
-                actor_info = 'Configure on device: {}, {}. '.format(self.gym_position_info[4], self.gym_position_info[5])
+                if self.substep == 0:
+                    actor_info = 'Checking on device: {}, {}, {}. -> Issue-Found.'.format(self.gym_position_info[4], self.gym_position_info[5], self.sub_pos_info)
+                else:
+                    actor_info = 'Configure on device: {}, {}, {}. -> '.format(self.gym_position_info[4], self.gym_position_info[5], self.sub_pos_info)
                 if self.substep >= 1 and action[1] > 0:
                     actor_info += 'Use command: {}. '.format(self.index_to_command(action[1]))
                 if self.substep == 2 and action[2] > 0:
-                    actor_info += 'Use {}.'.format(self.index_to_ip_subnet(action[2]))
+                    actor_info += 'Use parameter: {}.'.format(self.index_to_ip_subnet(action[2]))
                 elif self.substep == 2 and action[2] == 0:
-                    actor_info = 'NA.'
+                    actor_info += 'Parameter not needed.'.format(self.index_to_ip_subnet(action[2]))
                 #
                 self.action_mode = 'configure'
                 action = [self.gym_position_info[2], self.gym_position_info[3], action[1], action[2]]  # translated configure-action
@@ -506,7 +522,7 @@ class ComputerNetworkEnv(RandomTopo):
                 if self.max_steps_on_single_fault < self.steps_on_single_fault:
                     self.max_steps_on_single_fault = self.steps_on_single_fault
                 self.steps_on_single_fault = 0
-                actor_info = 'Force moved on. Checking device: {}, {}.'.format(self.gym_position_info[4], self.gym_position_info[5])
+                actor_info = 'Force moved on. Checking device: {}, {}, {}.'.format(self.gym_position_info[4], self.gym_position_info[5], self.sub_pos_info)
                 #
                 while self.substep != 0:
                     self.steps -= 1
@@ -525,11 +541,11 @@ class ComputerNetworkEnv(RandomTopo):
             done = True
         elif self.true_steps >= self.max_steps:
             done = True
-        self.gym_info = 'Episode: {}, Correct-Steps: {}/{}, {}, M-S: {}, Reward: {}, Done: {}, T-Rewards: {}, Correct-Actions: {}, Remaining-F: {}, Fixed-F: {}.'.format(self.gym_episodes, self.steps+self.gym_moves+self.gym_moves_2, self.true_steps, int((self.steps+self.gym_moves+self.gym_moves_2)*100/self.true_steps), self.max_steps_on_single_fault, reward, done, int(self.rewards), num_used_actions, num_faults, self.fixed_faults)
-        if done:
-            print(self.gym_info)
+        self.gym_info = 'Episode: {}, Correct-Steps/Total-Steps, Percentage: {}/{}, {}, Max_substeps_used_on_Single_fault: {}, Reward: {}, Done: {}, Total-Rewards: {}, Correct-Commands: {}, Remaining-Faults: {}, Fixed-Faults: {}.'.format(self.gym_episodes, self.steps+self.gym_moves+self.gym_moves_2, self.true_steps, int((self.steps+self.gym_moves+self.gym_moves_2)*100/self.true_steps), self.max_steps_on_single_fault, reward, done, int(self.rewards), num_used_actions, num_faults, self.fixed_faults)
         if self.subnets_18_enabled:
             info_1 = {}
+            if done:
+                print(self.gym_info)
         elif self.true_steps == 1:
             info_1 = {'actor_info': actor_info, 'gym_info': self.gym_info, 'topology_description': self.topo_description_simple, 'network_status': self.initial_observation_simple, 'correct_commands': self.initial_correct_actions_simple}
         else:
@@ -576,7 +592,7 @@ class ComputerNetworkEnv(RandomTopo):
             s_c_random_seq[self.subnets_position_info[n]] = n
         return s_d_random_seq, s_c_random_seq
 
-    def encode_num(self, num1, num2):
+    def encode_num(self, num1, num2):  # embed numbers to embedding
         max_substeps = 3
         SEP = 100
         d = 1

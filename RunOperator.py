@@ -44,14 +44,12 @@ if __name__ == '__main__':
     #
     env_hyperparameter_expert_sampling = None  # Note: disable it when use model.predict
 
-    num_envs = 1
-
     # make_env
     env_vars = [env_hyperparameter_replay_enabled, env_hyperparameter_expert_sampling, gym_env_port_01_list_file, gym_env_autosummary_04_list_file, gym_env_version_05_list_file]
     #
     simulator_vars = [num_devices, ips_subnets_dataset, gym_env_actions_list_file, gym_env_actions_numbers_list_file, gym_env_port_commands_list_file, gym_env_routing_protocols_list_file, gym_env_routing_commands_list_file, gym_env_device_names_file, gym_env_device_names_simple_file, gym_env_device_ports_types_file, gym_env_device_ports_numbers_file, gym_env_device_ports_simple_file, gym_env_ip_subnets_file, gym_env_ip_addresses_file, gym_env_ip_subnets_train_file, gym_env_ip_addresses_train_file, gym_env_ip_subnets_test_file, gym_env_ip_addresses_test_file, faults_types_inserted]
     #
-    topology_envs = SubprocVecEnv([make_env(env_vars, simulator_vars, i) for i in range(num_envs)])
+    topology_envs = SubprocVecEnv([make_env(env_vars, simulator_vars, i) for i in range(1)])
 
     # predict
     model = QRDQN.load("trained_models/trained_model.zip.q7.512-10", topology_envs, verbose=1)
@@ -66,7 +64,9 @@ if __name__ == '__main__':
             obs, reward, done, info = topology_envs.step(action)
             info = info[0]
             if print_details and j == 0:
-                print('', '#'*50, '\n        Network Information for Human only\n', '#'*50, '\nTopology_Description: \n{}\n\nNetwork_Status: \n{}\n\nCorrect_Commands: \n{}\n'.format(info['topology_description'], info['network_status'], info['correct_commands']), '#'*50, '\n\n---> Work start here:\n')
+                print('', '#'*50, '\n        Network Information for Human only\n', '#'*50, '\nTopology_Description: \n{}\n\nNetwork_Status: \n{}\n\nCorrect_Commands: \n{}\n'.format(info['topology_description'].replace(': 1. ', ':\n1. ').replace('. 2. ', '.\n2. ').replace('. 3. ', '.\n3. '), info['network_status'].replace(', ', ',\n').replace('network: ', 'network:\n'), info['correct_commands'].replace('. ', '.\n')), '#'*50, '\n\n---> The operator starts here:\n')
             j += 1
             if print_details:
                 print('Step {}: {}'.format(str(j), info['actor_info']))
+            if done[0]:
+                print(info['gym_info'])
