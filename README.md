@@ -15,7 +15,9 @@ Here is an example output:
 Topology_Description: 
 We are now implementing a computer network as follows:
 1. we are using 4 devices, named Device-G, Device-A, Device-I, Device-H respectively.
-2. Connection 1 is from device Device-G port Port-3 IP IP-Address-60/24 to device Device-A port Port-7 IP IP-Address-8/24, using subnet: IP-Subnet-13. Connection 2 is from device Device-G port Port-2 IP IP-Address-33/24 to device Device-H port Port-2 IP IP-Address-20/24, using subnet: IP-Subnet-4. Connection 3 is from device Device-A port Port-1 IP IP-Address-11/24 to device Device-I port Port-7 IP IP-Address-45/24, using subnet: IP-Subnet-18.
+2. Connection 1 is from device Device-G port Port-3 IP IP-Address-60/24 to device Device-A port Port-7 IP IP-Address-8/24, using subnet: IP-Subnet-13.
+   Connection 2 is from device Device-G port Port-2 IP IP-Address-33/24 to device Device-H port Port-2 IP IP-Address-20/24, using subnet: IP-Subnet-4.
+   Connection 3 is from device Device-A port Port-1 IP IP-Address-11/24 to device Device-I port Port-7 IP IP-Address-45/24, using subnet: IP-Subnet-18.
 3. we use the routing protocol eigrp and the AS number 1, and the auto-summary is disabled. 
 
 Network_Status: 
