@@ -292,7 +292,7 @@ Parameters for training:
 2. use parameters: train_freq=1024, target_update_interval=350000, max_grad_norm=5, learning_rate=1e-5, tau=1, gamma=0, batch_size=1024, gradient_steps=768, buffer_size=4000000
 3. use: model.learn(total_timesteps=int(4e6)) to train and collect data, and also use: model.train(120000, 1024) to continue training using the same data. Save the model
 4. loop step 3 until the loss value could not be better(smaller)
-5. change: max_grad_norm=3, learning_rate=1e-6. continue training as step 3 and 4
+5. change: max_grad_norm=3, learning_rate=1e-6. continue training as steps 2, 3 and 4
 
 FineTune:
 
