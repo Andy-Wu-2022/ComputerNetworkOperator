@@ -1,5 +1,7 @@
 # Information on using / testing it
 
+Link to the paper on the design of the `intelligent computer network operator`: https://medium.com/@wubinbin.1/use-reinforcement-learning-to-create-an-intelligent-computer-network-operator-46cf8ef4a17b
+
 ## Quick start
 
 1. clone this github repository: `git clone https://github.com/Andy-Wu-2022/ComputerNetworkOperator.git`
