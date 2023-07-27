@@ -2,12 +2,15 @@
 
 Link to the paper on the design of the `intelligent computer network operator`: https://medium.com/@wubinbin.1/use-reinforcement-learning-to-create-an-intelligent-computer-network-operator-46cf8ef4a17b
 
+## Important Note:
+
+1. The source code is fully tested using: python==3.10.6 stable-baselines3==1.7.0 sb3-contrib==1.7.0 gym==0.21.0, there may be errors with Other-Lib-Versions.
+2. With python 3.11+, you may see 2 warnings on `object lr_schedule` and `object exploration_schedule`, please ignore them for now.
+
 ## Quick start
 
-( Note: If you are using Windows, you may see 2 warnings on `object lr_schedule` and `object exploration_schedule`, please ignore them for now while I am fixing them. Linux has No such issues. )
-
 1. clone this github repository: `git clone https://github.com/Andy-Wu-2022/ComputerNetworkOperator.git`
-2. install `python3` and `pip install stable-baselines3 sb3-contrib deepdiff`
+2. install `python3` and `pip install stable-baselines3==1.7.0 sb3-contrib==1.7.0 gym==0.21.0 deepdiff`
 3. `cd ComputerNetworkOperator` and run it: `python3 RunOperator.py`
 
 Here is an example output:
