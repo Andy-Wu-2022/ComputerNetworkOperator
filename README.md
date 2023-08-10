@@ -6,6 +6,7 @@ Link to the paper on the design of the `intelligent computer network operator`: 
 
 1. The source code is fully tested using: python==3.10.6 stable-baselines3==1.7.0 sb3-contrib==1.7.0 gym==0.21.0, there may be errors with Other-Lib-Versions.
 2. With python 3.11+, you may see 2 warnings on `object lr_schedule` and `object exploration_schedule`, please ignore them for now.
+3. Use `python 3.10` and `pip version 22.2.1` and `pip install setuptools==63.2.0` if you cloud NOT install `gym==0.21.0`.
 
 ## Quick start
 
